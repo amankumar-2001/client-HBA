@@ -23,12 +23,12 @@ function Homescreen() {
   const getData = async () => {
     try {
       setloading(true);
-      const data = await axios.get(
+      const result = await axios.get(
         "https://hotel-booking-app-lemon.vercel.app/api/rooms/getallrooms"
       );
-      console.log("data", data);
-      setrooms(data);
-      setdublicaterooms(data);
+
+      setrooms(result.data);
+      setdublicaterooms(result.data);
       setloading(false);
       seterror(false);
     } catch (error) {
@@ -140,7 +140,7 @@ function Homescreen() {
         ) : (
           rooms.map((room) => {
             return (
-              <div className="col-md-9 mt-4">
+              <div className="col-md-9 mt-4" key={room._id}>
                 <Room room={room} fromdate={fromdate} todate={todate} />
               </div>
             );
