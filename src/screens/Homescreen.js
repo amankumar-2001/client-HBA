@@ -10,31 +10,31 @@ import Form from "react-bootstrap/Form";
 const { RangePicker } = DatePicker;
 
 function Homescreen() {
-  const [rooms, setrooms] = useState([]);
-  const [loading, setloading] = useState([]);
-  const [error, seterror] = useState([]);
+  const [rooms, setRooms] = useState([]);
+  const [loading, setLoading] = useState([]);
+  const [error, setError] = useState([]);
 
-  const [fromdate, setfromdate] = useState();
-  const [todate, settodate] = useState();
-  const [dublicaterooms, setdublicaterooms] = useState([]);
+  const [fromDate, setFromDate] = useState();
+  const [toDate, setToDate] = useState();
+  const [dublicateRooms, setDublicateRooms] = useState([]);
   const [searchkey, setsearchkey] = useState();
   const [type, settype] = useState("all");
 
   const getData = async () => {
     try {
-      setloading(true);
+      setLoading(true);
       const result = await axios.get(
         "https://hotel-booking-app-lemon.vercel.app/api/rooms/getallrooms"
       );
 
-      setrooms(result.data);
-      setdublicaterooms(result.data);
-      setloading(false);
-      seterror(false);
+      setRooms(result.data);
+      setDublicateRooms(result.data);
+      setLoading(false);
+      setError(false);
     } catch (error) {
-      seterror(true);
+      setError(true);
       console.log(error);
-      setloading(false);
+      setLoading(false);
     }
   };
 
@@ -43,29 +43,29 @@ function Homescreen() {
   }, []);
 
   function filterByDate(dates) {
-    setfromdate(moment(dates[0]).format("DD-MM-YYYY"));
-    settodate(moment(dates[1]).format("DD-MM-YYYY"));
+    setFromDate(moment(dates[0]).format("DD-MM-YYYY"));
+    setToDate(moment(dates[1]).format("DD-MM-YYYY"));
 
     var temprooms = [];
     var availability = false;
-    for (const room of dublicaterooms) {
+    for (const room of dublicateRooms) {
       if (room.currentbookings.length > 0) {
         for (const booking of room.currentbookings) {
           if (
             moment(moment(dates[0]).format("DD-MM-YYYY")).isBetween(
-              booking.fromdate,
-              booking.todate
+              booking.fromDate,
+              booking.toDate
             ) &&
             moment(moment(dates[1]).format("DD-MM-YYYY")).isBetween(
-              booking.fromdate,
-              booking.todate
+              booking.fromDate,
+              booking.toDate
             )
           ) {
             if (
-              moment(dates[0].format("DD-MM-YYYY")) !== booking.fromdate &&
-              moment(dates[0].format("DD-MM-YYYY")) !== booking.todate &&
-              moment(dates[1].format("DD-MM-YYYY")) !== booking.fromdate &&
-              moment(dates[1].format("DD-MM-YYYY")) !== booking.todate
+              moment(dates[0].format("DD-MM-YYYY")) !== booking.fromDate &&
+              moment(dates[0].format("DD-MM-YYYY")) !== booking.toDate &&
+              moment(dates[1].format("DD-MM-YYYY")) !== booking.fromDate &&
+              moment(dates[1].format("DD-MM-YYYY")) !== booking.toDate
             ) {
               availability = true;
             }
@@ -77,29 +77,29 @@ function Homescreen() {
         temprooms.push(room);
       }
 
-      setrooms(temprooms);
+      setRooms(temprooms);
     }
   }
 
   function filterBySearch() {
-    const temprooms = dublicaterooms.filter((room) =>
+    const temprooms = dublicateRooms.filter((room) =>
       room.name.toLowerCase().includes(searchkey.toLowerCase())
     );
 
-    setrooms(temprooms);
+    setRooms(temprooms);
   }
 
   function filterByType(e) {
     settype(e);
 
     if (e !== "all") {
-      const temprooms = dublicaterooms.filter(
+      const temprooms = dublicateRooms.filter(
         (room) => room.type.toLowerCase() == e.toLowerCase()
       );
 
-      setrooms(temprooms);
+      setRooms(temprooms);
     } else {
-      setrooms(dublicaterooms);
+      setRooms(dublicateRooms);
     }
   }
   return (
@@ -141,7 +141,7 @@ function Homescreen() {
           rooms.map((room) => {
             return (
               <div className="col-md-9 mt-4" key={room._id}>
-                <Room room={room} fromdate={fromdate} todate={todate} />
+                <Room room={room} fromDate={fromDate} toDate={toDate} />
               </div>
             );
           })
