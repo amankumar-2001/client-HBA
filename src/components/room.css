@@ -1,0 +1,43 @@
+.textleft{
+    text-align: left;
+}
+.row{
+    padding: 20px;
+}
+.smallimg{
+  height: 200px;
+  width: 100% !important;
+  border-radius: 5px !important;
+}
+
+
+.hsize{
+  font-size: 20px !important;
+  font-weight: 700;
+}
+
+.btnClass{
+    float: right;
+}
+
+.btn{
+    background-color: black;
+    margin: 10px;
+    box-shadow: none;
+    border: 0px solid black;
+}
+
+.btn:hover{
+    background-color:gray;
+}
+
+.bs{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    margin-top: 2px;
+    border-radius: 5px;
+}
+
+.bigimg{
+   height: 400px;
+   border-radius: 5px;
+}

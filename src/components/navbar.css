@@ -1,0 +1,32 @@
+.navbar{
+    background-color: black;
+}
+
+.nav-link,.navbar-brand{
+    color: white;
+}
+
+.nav-link:hover,.navbar-brand:hover{
+    color: gray;
+}
+
+.bold{
+    font-weight: 700;
+}
+
+.hsize{
+    font-size: 2.5vh;
+}
+
+.navbar-nav{
+    margin-left: auto;
+}
+
+#navbarNav{
+   display: flex;
+   justify-content: right;
+}
+
+#dropdown-basic{
+   --bs-btn-border-color: gray;
+}
