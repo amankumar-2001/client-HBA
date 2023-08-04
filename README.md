@@ -50,7 +50,7 @@ Clone the repo and set up the application
 
 ## Application Link:
 
-Link to the Application hosted on Vercel [LINK]([https://hotel-booking-hnkaj9iio-amankumar-2001.vercel.app/](https://client-hba.vercel.app/))
+Link to the Application hosted on Vercel ([LINK](https://client-hba.vercel.app/))
 
 
 ## Author
