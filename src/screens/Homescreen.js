@@ -23,7 +23,9 @@ function Homescreen() {
   const getData = async () => {
     try {
       setloading(true);
-      const data = await axios.get("http://localhost:4000/api/rooms/getallrooms");
+      const data = await axios.get(
+        "https://hotel-booking-app-lemon.vercel.app/api/rooms/getallrooms"
+      );
       console.log("data", data);
       setrooms(data);
       setdublicaterooms(data);
