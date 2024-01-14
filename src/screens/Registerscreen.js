@@ -33,7 +33,6 @@ function Registerscreen() {
 
         setloading(false);
         setsuccess(true);
-
         setname("");
         setemail("");
         setpassword("");

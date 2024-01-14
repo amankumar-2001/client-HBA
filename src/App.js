@@ -19,7 +19,7 @@ function App() {
           <Route path="/" exact element={<Landingscreen />} />
           <Route path="/home" exact element={<Homescreen />} />
           <Route
-            path="/book/:roomid/:fromdate/:todate"
+            path="/book/:roomid/:fromDate/:toDate"
             exact
             element={<Bookingscreen />}
           />

@@ -4,22 +4,69 @@ import axios from "axios";
 import moment from "moment";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
-import Success from "../components/Success";
 import Swal from "sweetalert2";
+import Carousel from "react-bootstrap/Carousel";
+import styled from "styled-components";
+
+const Container = styled.div`
+  margin: 5rem;
+`;
+
+const RowContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 3rem;
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 50px;
+  min-width: 1000px;
+  gap: 20px;
+`;
+
+const RoomDetails = styled.div`
+  width: 50%;
+  text-align: left;
+
+  img {
+    width: 100%;
+  }
+`;
+
+const BookingDetails = styled.div`
+  width: 50%;
+  text-align: right;
+`;
+
+const BookingAmount = styled.div`
+  text-align: right;
+`;
+
+const RightText = styled.div`
+  text-align: right;
+`;
+
+const PayButton = styled.button`
+  color: white;
+  padding: 10px 20px;
+  margin-top: 1rem;
+  background: black;
+  border: none;
+  border-radius: 4px;
+`;
 
 function Bookingscreen(props) {
-  const { roomid } = useParams();
-  const { fromdate } = useParams();
-  const { todate } = useParams();
+  const { roomid, fromDate, toDate } = useParams();
+
   const totaldays =
     moment
       .duration(
-        moment(todate, "DD-MM-YYYY").diff(moment(fromdate, "DD-MM-YYYY"))
+        moment(toDate, "DD-MM-YYYY").diff(moment(fromDate, "DD-MM-YYYY"))
       )
       .asDays() + 1;
 
   const [loading, setloading] = useState(true);
   const [error, seterror] = useState();
+  const [user, setUser] = useState();
   const [room, setroom] = useState();
   const [totalamount, settotalamount] = useState();
 
@@ -29,7 +76,7 @@ function Bookingscreen(props) {
       const data = (
         await axios.post(
           "https://hotel-booking-app-lemon.vercel.app/api/rooms/getroombyid",
-          { roomid: roomid }
+          { roomid }
         )
       ).data;
       settotalamount(totaldays * data.rentperday);
@@ -44,6 +91,13 @@ function Bookingscreen(props) {
   };
 
   useEffect(() => {
+    const username = JSON.parse(localStorage.getItem(`currentUser`));
+    if (username) {
+      setUser(username);
+    } else {
+      alert("You are not login");
+      window.location.href = "/home";
+    }
     getData();
   }, []);
 
@@ -51,8 +105,8 @@ function Bookingscreen(props) {
     const bookingDetails = {
       room,
       userid: JSON.parse(localStorage.getItem(`currentUser`)).data._id,
-      fromdate,
-      todate,
+      fromDate,
+      toDate,
       totalamount,
       totaldays,
     };
@@ -76,51 +130,56 @@ function Bookingscreen(props) {
   }
 
   return (
-    <div className="m-5">
+    <Container>
       {loading ? (
         <Loader />
       ) : error ? (
         <Error message="Something went wrong" />
       ) : (
-        <div>
-          <div className="row continer justify-content-center m-6 bs">
-            <div className="col-md-5 textleft">
-              <h1 className="textleft">{room.name}</h1>
-              <img src={room.imageurls[0]} className="bigimg" />
+        <RowContainer>
+          <RoomDetails>
+            <h1>{room.name}</h1>
+            <Carousel>
+              {room.imageurls.map((url) => {
+                return (
+                  <Carousel.Item>
+                    <img
+                      className="d-block w-100 bigimg"
+                      src={url}
+                      alt="First slide"
+                    />
+                  </Carousel.Item>
+                );
+              })}
+            </Carousel>
+          </RoomDetails>
+          <BookingDetails>
+            <div>
+              <h1>Booking Details</h1>
+              <hr />
+              <b>
+                <p>Name: {user.data.name}</p>
+                <p>From: {fromDate}</p>
+                <p>To: {toDate}</p>
+                <p>Max Count: {room.maxcount}</p>
+              </b>
             </div>
-            <div className="col-md-6">
-              <div className="textright">
-                <h1>Booking Details</h1>
-                <hr />
-                <b>
-                  <p>
-                    Name:{" "}
-                    {JSON.parse(localStorage.getItem(`currentUser`)).data.name}
-                  </p>
-                  <p>From : {fromdate}</p>
-                  <p>To: {todate}</p>
-                  <p>Max Count: {room.maxcount}</p>
-                </b>
-              </div>
-              <div className="textright">
-                <h1>Amount</h1>
-                <hr />
-                <b>
-                  <p>Total days : {totaldays}</p>
-                  <p>Rent per day : {room.rentperday}</p>
-                  <p>Total amount: {totalamount}</p>
-                </b>
-              </div>
-              <div className="textright">
-                <button className="btn-primary btn" onClick={bookRoom}>
-                  Pay Now
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+            <BookingAmount>
+              <h1>Amount</h1>
+              <hr />
+              <b>
+                <p>Total days: {totaldays}</p>
+                <p>Rent per day: {room.rentperday}</p>
+                <p>Total amount: {totalamount}</p>
+              </b>
+            </BookingAmount>
+            <RightText>
+              <PayButton onClick={bookRoom}>Pay Now</PayButton>
+            </RightText>
+          </BookingDetails>
+        </RowContainer>
       )}
-    </div>
+    </Container>
   );
 }
 

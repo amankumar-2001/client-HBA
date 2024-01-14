@@ -5,9 +5,28 @@ import { DatePicker } from "antd";
 import "antd/dist/antd.min.css";
 import moment from "moment";
 import Loader from "../components/Loader";
-import Error from "../components/Error";
 import Form from "react-bootstrap/Form";
+import styled from "styled-components";
+
 const { RangePicker } = DatePicker;
+
+const Container = styled.div`
+  margin-top: 5rem;
+`;
+
+const FilterRow = styled.div`
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const StyledRangePicker = styled(RangePicker)`
+  width: 100%;
+`;
+
+const SearchInput = styled.input`
+  width: 100%;
+`;
 
 function Homescreen() {
   const [rooms, setRooms] = useState([]);
@@ -102,14 +121,15 @@ function Homescreen() {
       setRooms(dublicateRooms);
     }
   }
+
   return (
-    <div className="container">
-      <div className="row mt-5 bs filter">
+    <Container className="container">
+      <FilterRow className="row bs filter">
         <div className="col-md-3">
-          <RangePicker format="DD-MM-YYYY" onChange={filterByDate} />
+          <StyledRangePicker format="DD-MM-YYYY" onChange={filterByDate} />
         </div>
         <div className="col-md-3">
-          <input
+          <SearchInput
             type="text"
             className="form-control"
             placeholder="Search Rooms"
@@ -133,7 +153,7 @@ function Homescreen() {
             <option value="non-delux">Non-Delux</option>
           </Form.Select>
         </div>
-      </div>
+      </FilterRow>
       <div className="row justify-content-center mt-5">
         {loading ? (
           <Loader />
@@ -147,7 +167,7 @@ function Homescreen() {
           })
         )}
       </div>
-    </div>
+    </Container>
   );
 }
 
